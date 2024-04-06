@@ -5,14 +5,16 @@
 
 ## how to start
 
-````bash
+```bash
 npm install
-```bash npm install
+```
+
 Install the dependencies.
+
 ```bash
 npx prisma db push
 npx primsa generate
-````
+```
 
 Create the database and generate the Prisma Client.
 
