@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { Hashing, isHashValid } from 'src/utils/hash';
@@ -21,9 +25,15 @@ export class AuthService {
       access_token: await this.jwtService.signAsync(payload),
     };
   }
-
   async signIn(email: string, pass: string): Promise<any> {
-    const password: string = await Hashing(pass);
-    return this.userService.create({ email, password });
+    try {
+      const password: string = await Hashing(pass);
+      await this.userService.create({ email, password });
+      return {
+        message: 'User created',
+      };
+    } catch (e) {
+      throw new ConflictException();
+    }
   }
 }
