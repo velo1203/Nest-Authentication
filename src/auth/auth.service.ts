@@ -16,6 +16,9 @@ export class AuthService {
 
   async logIn(email: string, pass: string): Promise<{ access_token: string }> {
     const user = await this.userService.findOne(email);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
     const ishashed = await isHashValid(pass, user.password);
     if (!ishashed) {
       throw new UnauthorizedException();
